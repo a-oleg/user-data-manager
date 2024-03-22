@@ -1,0 +1,272 @@
+openapi: 3.0.0
+info:
+  description: merged spec
+  title: merged spec
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+paths:
+  /users:
+    get:
+      description: Method of getting users from the database
+      operationId: getUsers
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/listUserDto'
+          description: Internal server error
+        "515":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDto'
+          description: Internal server error
+      summary: Method of getting users
+      tags:
+      - User
+      x-accepts: application/json
+      x-tags:
+      - tag: User
+    post:
+      description: Method for saving the user in the database
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userDto'
+          description: Successful saving of the user
+        "515":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDto'
+          description: Internal server error
+      summary: Method of adding a user
+      tags:
+      - User
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: User
+  /users/{id}:
+    delete:
+      description: The method of deleting the user in the database
+      operationId: deleteUserById
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userDto'
+          description: Successful deletion of the user. The UserDTO model is returned
+            in case the user decides to cancel the deletion
+        "515":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDto'
+          description: Internal server error
+      summary: Method for deleting a user by ID
+      tags:
+      - User
+      x-accepts: application/json
+      x-tags:
+      - tag: User
+    get:
+      operationId: getUserById
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userDto'
+          description: Successful return of the user
+        "515":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDto'
+          description: Internal server error
+      summary: Method of getting user by ID
+      tags:
+      - User
+      x-accepts: application/json
+      x-tags:
+      - tag: User
+    put:
+      description: The method of updating the user in the database
+      operationId: updateUserById
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userDto'
+          description: Successful update of user data
+        "515":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDto'
+          description: Internal server error
+      summary: Method of updating the user by ID
+      tags:
+      - User
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: User
+components:
+  schemas:
+    listUserDto:
+      description: List of user objects
+      properties:
+        users:
+          description: List of user objects
+          items:
+            $ref: '#/components/schemas/userDto'
+          type: array
+      required:
+      - users
+      type: object
+    errorDto:
+      description: The general error model of the application
+      properties:
+        message:
+          type: string
+        code:
+          example: 10001
+          type: integer
+        errorTime:
+          description: Date of the event
+          example: 2000-01-01T15:00:00+01
+          format: data-time
+          type: string
+        type:
+          default: ERROR
+          enum:
+          - ERROR
+          - WARNING
+          type: string
+        displayMessage:
+          example: An error occurred while performing this operation. Error code 10-50000
+          type: string
+      required:
+      - code
+      - type
+      type: object
+    userDto:
+      description: A user object
+      properties:
+        firstName:
+          description: First name of the user
+          example: Michael
+          type: string
+        lastName:
+          description: Last name of the user
+          example: Smith
+          type: string
+        loginName:
+          description: Login for user authorization
+          example: myLogin
+          type: string
+        email:
+          description: User e-mail
+          example: smith@gmail.com
+          type: string
+        password:
+          description: User password
+          example: Qwerty1
+          type: string
+        createdAt:
+          description: User creation date
+          example: 2000-01-01T15:00:00+01
+          format: 2000-01-01T15:00:00+01
+          type: string
+        activityStatus:
+          description: Current or archived version of the user
+          example: true
+          type: boolean
+        facebookProfile:
+          description: Facebook profile
+          example: myFacebookProfile
+          type: string
+        instagramProfile:
+          description: Instagram profile
+          example: myInstagramProfile
+          type: string
+        tikTokProfile:
+          description: TikTok profile
+          example: myTikTokProfile
+          type: string
+        xProfile:
+          description: X (ex Twitter) profile
+          example: myXProfile
+          type: string
+        iMessageProfile:
+          description: iMessage profile
+          example: myiMessageProfile
+          type: string
+        snapChatProfile:
+          description: SnapChat profile
+          example: mySnapChatProfile
+          type: string
+        pinterestProfile:
+          description: Pinterest profile
+          example: myPinterestProfile
+          type: string
+        linkedInProfile:
+          description: LinkedIn profile
+          example: myLinkedInProfile
+          type: string
+        redditProfile:
+          description: Reddit profile
+          example: myRedditProfile
+          type: string
+        gitHubProfile:
+          description: GitHub profile
+          example: myGitHubProfile
+          type: string
+      required:
+      - activityStatus
+      - createdAt
+      - email
+      - password
+      type: object
